@@ -16,6 +16,8 @@
 #	L. Cliff Brett 2/2012
 #
 
+wrap_yaml=~/.testwrap.yaml
+
 # Restore quotes to args as appropriate:
 #   	We assume that any arg that includes whitespace should be quoted.
 #   	The only exception is the --format option, whose argument is a format
@@ -31,6 +33,6 @@ until [ $# == 0 ]; do
 done
 
 # Invoke 'wrapper.rb' with args.
-cmd="/bin/bash -c \"WRAP_YAML=~/.testwrap/testwrap.yaml wrapper.rb $args\""
+cmd="/bin/bash -c \"WRAP_YAML=$wrap_yaml wrapper.rb $args\""
 eval $cmd
 exit $?
