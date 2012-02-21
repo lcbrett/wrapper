@@ -1,0 +1,23 @@
+command:
+  executable: testout
+
+wrapper:
+  stdout: /tmp/testwrap.log
+  stderr: /tmp/testwrap.log
+
+/.*push.*/:
+  pre: testout pre-push 
+
+/.*pull.*/:
+  pre: testout pre-pull
+  post: testout post-pull
+
+/.*fetch.*/:
+  post: testout post-fetch
+
+/.*clone\p{Space}+.*\.git\p{Space}+(?<workdir>\p{Graph}+).*/:
+  post: echo <workdir>; testout post-clone <workdir>
+
+/.*branch.*--track.*/:
+  post: testout post-branch-fetch
+

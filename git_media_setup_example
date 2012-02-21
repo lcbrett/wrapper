@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# FILE
+#	git_media_setup_example
+#
+# DESCRIPTION
+#	Configure git for use with git-media extension.
+#
+# NOTES
+#	Put this file somewhere in your PATH.
+#
+echo "git_media_setup_example $1"
+
+# Navigate to the git directory.
+pushd $1
+
+# Configure git filters to use git-media.
+/usr/bin/git config filter.media.clean "git-media filter-clean"
+/usr/bin/git config filter.media.smudge "git-media filter-smudge"
+
+# Set up git-media transport.
+# Change this section to use Amazon S3 or SCP.
+/usr/bin/git config git-media.transport local
+local_media_path=${HOME}/media
+! [[ -d $local_media_path ]] && mkdir -p $local_media_path
+/usr/bin/git config git-media.localpath $local_media_path
+
+# Sync up git-media.
+/usr/bin/git media sync
+
+# Go back to original directory.
+popd
+

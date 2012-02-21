@@ -1,0 +1,22 @@
+command:
+  executable: /usr/bin/git
+
+wrapper:
+  stdout: /tmp/gitwrap.log
+  stderr: /tmp/gitwrap.log
+
+/.*push.*/:
+  pre: /usr/bin/git media sync
+
+/.*pull.*/:
+  post: /usr/bin/git media sync
+
+/.*fetch.*/:
+  post: /usr/bin/git media sync
+
+/.*clone\p{Space}+.*\.git\p{Space}+(?<workdir>\p{Graph}+).*/:
+  post: git_media_setup_example <workdir>
+
+/.*branch.*--track.*/:
+  post: /usr/bin/git media sync
+

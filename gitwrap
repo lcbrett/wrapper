@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# FILE
+#	gitwrap
+#
+# DESCRIPTION
+#	Example shell wrapper for git.
+#
+#	This shell script sets up the environment for the invocation of 
+#	wrapper.rb.  
+#	
+# NOTES
+#	Needs to be installed as 'git' for use with SourceTree git client, 
+#	but can live anywhere in your PATH.
+#
+# AUTHOR
+#	L. Cliff Brett 2/2012
+#
+
+# Restore quotes to args as appropriate:
+#   	We assume that any arg that includes whitespace should be quoted.
+#   	The only exception is the --format option, whose argument is a format
+#	string.  The format string should be quoted alone; e.g.,
+#		
+#		--format="<format string>"
+#
+args=""
+until [ $# == 0 ]; do
+   arg=`echo $1 | sed -E 's/(--format=)?(.+[ ]+.+)/\1\"\2\"/g'`
+   args="$args $arg"
+   shift 1
+done
+
+# Invoke 'wrapper.rb' with args.
+cmd="/bin/bash -c \"WRAP_YAML=~/.gitwrap/gitwrap.yaml wrapper.rb $args\""
+eval $cmd
+exit $?

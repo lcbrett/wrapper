@@ -1,0 +1,78 @@
+Welcome to wrapper.rb.
+
+This Ruby module provides a generalized wrapper script for other commands.
+It uses a yaml configuration file to describe pre- and post- commands
+to execute before and after the command being invoked.  Output from the pre-
+post- commands can optionally be redirected to a file so the output of the 
+wrapped command is unchanged.
+
+
+MOTIVATION
+
+We're using git for game development, but we don't want to bloat our source
+repos with art assets.  Fortunately, Scott Chacon's wrote a handy little
+git extension called git-media (https://github.com/schacon/git-media) that 
+lets you use git to track such files while storing their content outside of
+git.  
+
+At the same time, we don't want to force our artists to climb git's steep 
+learning curve.  We'd like to let them use a nice GUI client that makes their
+lives easier and their work less error-prone.   
+
+These two goals came into conflict because the git-media extension requires 
+execution of a 'git media sync' command to transfer files to and from external
+storage.  This should typically happen whenever a user moves files between 
+his working directory and remote; e.g., pushes, pulls, fetches, clones, etc.
+A set of client-side git hooks for these commands would have worked for this
+purpose, but git does not support such hooks.  
+
+This wrapper was our solution.  We use it with Atlassian's SourceTree GUI
+git client on Mac OSX; it's completely untested on other platforms and clients.
+
+
+SETUP
+
+Make sure you're using ruby version 1.9.2+.
+Copy the file 'wrapper.rb' to a directory in your PATH.  
+
+All the other files are provided as examples:  
+
+  - 'testwrap' just produces an echo to stdout while writing pre- and 
+    post- command output to a log file.  It uses 'testout' as the command 
+    being wrapped and 'testwrap.yaml' as its configuration file.  
+  - 'gitwrap' wraps a git assumed to be installed at /usr/bin/git; it uses
+    'gitwrap.yaml' as its configuration file.  
+  - Our convention is to put the yaml files in a hidden directory under 
+    ${HOME}:  'testwrap.yaml' goes in ~/.testwrap; 'gitwrap.yaml' goes in 
+    ~/.gitwrap.  You don't need to follow this convention, but be sure to 
+    change the WRAP_YAML variable in the appropriate wrapper script
+    ('testwrap' or 'gitwrap') to reflect its location.  
+  - All the executables ('testwrap', 'testout', 'gitwrap') should be copied 
+    to your PATH.
+  - 'gitwrap' may need to be renamed as 'git' if you want to use it with 
+    a GUI client like SourceTree.  This is because SourceTree lets you
+    specify which git executable you want to use, but it doesn't let you
+    choose anything with a name other than 'git'.  Be careful not to 
+    overwrite the real git, and make sure that the renamed 'gitwrap' is
+    in a directory that's earlier in your path than the real git location.
+
+
+THE CONFIGURATION FILE
+
+The 'command' section should contain a single entry:  'executable', which 
+specifies the name of the command being wrapped.  A full pathname may
+be used.
+
+The 'wrapper' section can contain entries for 'stdout' and 'stderr', each of 
+which specifies a file to which the named output stream from the pre-
+and post- commands will be redirected.  These can be the same file.
+
+All other sections are Ruby regular expressions appearing between '/'s.  
+These regular expressions are compared against the command line used to 
+invoke 'wrapper.rb'.  The first match found will be used, and any pre- or 
+post- commands specified in that section will be applied before and/or after
+the wrapped command.  Incoming command-line arguments can be captured
+via the (?<name>...) construct and passed to the pre- or post- command
+as <name>.
+
+

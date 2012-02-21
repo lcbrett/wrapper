@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# FILE
+#	testout
+#
+# DESCRIPTION
+#	Just echo command line--useful for testing wrapper.
+#
+# NOTES
+#	Put this file somewhere in your PATH.
+#
+
+echo $0 $@
