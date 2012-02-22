@@ -27,11 +27,15 @@ wrap_yaml=~/.gitwrap.yaml
 #		
 #		--format="<format string>"
 #
+#	The shell wants to strip these quotes off before passing them to wrapper.rb,
+#	and I haven't figured a way around it.  We therefore also insert '%q' or '%Q',
+#	which wrapper.rb will replace with quotes.
+#
+#	We also need to escape '<' and '>' with a '\' character.
+#
 args=""
 until [ $# == 0 ]; do
-   # arg=`echo $1 | sed -E 's/([\<\>])/\\\&/g'`
-   # arg=`echo $arg | sed -E 's/(--format=)?(.+[ ]+.+)/\1\"\2\"/g'`
-   arg=`echo $1 | sed -E 's/([\<\>])/\\\&/g; s/(--format=)?(.+[ ]+.+)/\1\\\"\2\\\"/g'`
+   arg=`echo $1 | sed -E 's/([\<\>])/\\\&/g; s/(--format=)?(.+[ ]+.+)/\1\\\"%q\\2\%q\\\"/g'`
    args="$args $arg"
    shift 1
 done
