@@ -17,6 +17,7 @@
 #	L. Cliff Brett 2/2012
 #
 
+. ~/.bashrc
 wrap_yaml=~/.gitwrap.yaml
 
 # Restore quotes to args as appropriate:
@@ -28,7 +29,9 @@ wrap_yaml=~/.gitwrap.yaml
 #
 args=""
 until [ $# == 0 ]; do
-   arg=`echo $1 | sed -E 's/(--format=)?(.+[ ]+.+)/\1\"\2\"/g'`
+   # arg=`echo $1 | sed -E 's/([\<\>])/\\\&/g'`
+   # arg=`echo $arg | sed -E 's/(--format=)?(.+[ ]+.+)/\1\"\2\"/g'`
+   arg=`echo $1 | sed -E 's/([\<\>])/\\\&/g; s/(--format=)?(.+[ ]+.+)/\1\\\"\2\\\"/g'`
    args="$args $arg"
    shift 1
 done

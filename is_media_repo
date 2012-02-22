@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# FILE
+#	is_media_repo
+#
+# DESCRIPTION
+#	Returns true if this is a media repository; false otherwise.
+#
+
+transport=`/usr/bin/git config --get git-media.transport`
+is_media_repo=`test $transport`
+exit $is_media_repo

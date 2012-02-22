@@ -6,17 +6,17 @@ wrapper:
   stderr: /tmp/gitwrap.log
 
 /.*push.*/:
-  pre: /usr/bin/git media sync
+  pre: is_media_repo && /usr/bin/git media sync
 
 /.*pull.*/:
-  post: /usr/bin/git media sync
+  post: is_media_repo && /usr/bin/git media sync
 
 /.*fetch.*/:
-  post: /usr/bin/git media sync
+  post: is_media_repo && /usr/bin/git media sync
 
 /.*clone\p{Space}+.*\.git\p{Space}+(?<workdir>\p{Graph}+).*/:
   post: git_media_setup_example <workdir>
 
 /.*branch.*--track.*/:
-  post: /usr/bin/git media sync
+  post: is_media_repo && /usr/bin/git media sync
 

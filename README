@@ -49,13 +49,16 @@ All the other files are provided as examples:
     WRAP_YAML variable in the appropriate wrapper script ('testwrap' or 
     'gitwrap') to reflect its location.  
   - All the executables ('testwrap', 'testout', 'gitwrap',
-    'git_media_setup_exaample') should be copied to your PATH.
+    'git_media_setup_exaample', 'is_media_repo') should be copied to your 
+    PATH.
   - 'gitwrap' may need to be renamed as 'git' if you want to use it with 
     a GUI client like SourceTree.  This is because SourceTree lets you
     specify which git executable you want to use, but it doesn't let you
     choose anything with a name other than 'git'.  Be careful not to 
     overwrite the real git, and make sure that the renamed 'gitwrap' is
     in a directory that's earlier in your path than the real git location.
+  - 'is_media_repo' is needed so that we don't run 'git media sync' unless
+    this is in fact a media repository.
 
 
 THE CONFIGURATION FILE

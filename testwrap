@@ -16,6 +16,7 @@
 #	L. Cliff Brett 2/2012
 #
 
+. ~/.bashrc
 wrap_yaml=~/.testwrap.yaml
 
 # Restore quotes to args as appropriate:
@@ -25,14 +26,18 @@ wrap_yaml=~/.testwrap.yaml
 #		
 #		--format="<format string>"
 #
+#	We also need to escape '<' and '>' with a '\' character.
+#
 args=""
 until [ $# == 0 ]; do
-   arg=`echo $1 | sed -E 's/(--format=)?(.+[ ]+.+)/\1\"\2\"/g'`
+   arg=`echo $1 | sed -E 's/([\<\>])/\\\&/g; s/(--format=)?(.+[ ]+.+)/\1\\\"\2\\\"/g'`
+   echo "ARG = $arg"
    args="$args $arg"
    shift 1
 done
 
 # Invoke 'wrapper.rb' with args.
 cmd="/bin/bash -c \"WRAP_YAML=$wrap_yaml wrapper.rb $args\""
+echo $cmd
 eval $cmd
 exit $?
