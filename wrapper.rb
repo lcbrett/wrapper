@@ -26,7 +26,13 @@ class Wrapper
    end
 
    def set_cmd_args(argv)
-      @cmdArgs = argv.join(" ")
+      filteredArgs = Array.new
+      argv.each do |inArg|
+         # Replace '%q' or '%Q' in the incoming argument with quotes
+         outArgs = filteredArgs.push(inArg.gsub(/%[Qq]/,"\""))
+      end
+      # @cmdArgs = argv.join(" ")
+      @cmdArgs = filteredArgs.join(" ")
    end
       
    def config
@@ -111,6 +117,12 @@ class Wrapper
 
       # Execute the wrapped command.
       @cmd = "#{@executable} #{@cmdArgs}"
+
+      # DELETE THIS
+      # @log = "echo #{@cmdArgs}#{@wrapperOut}#{@wrapperErr}"
+      # system @log
+
+
       system @cmd
       @status = $?.exitstatus
       if @status != 0
