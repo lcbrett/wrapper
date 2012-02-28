@@ -15,7 +15,7 @@ wrapper:
   post: is_media_repo && /usr/bin/git media sync
 
 /.*clone\p{Space}+.*\.git\p{Space}+(?<workdir>\p{Graph}+).*/:
-  post: git_media_setup_example <workdir>
+  post: pushd <workdir>; is_media_repo && git_media_setup_example <workdir>; popd
 
 /.*branch.*--track.*/:
   post: is_media_repo && /usr/bin/git media sync
