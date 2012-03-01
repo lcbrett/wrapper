@@ -11,6 +11,5 @@
 # is_media_repo=`test $transport`
 # exit $is_media_repo
 
-
-[[ -d .git ]] && [[ `find . -name .gitattributes -exec grep filter=media {} \;` == "" ]] && exit 1 
+([[ ! -d .git ]] || [[ `find . -name .gitattributes -exec grep filter=media {} \;` == "" ]]) && exit 1 
 exit 0
